@@ -1,14 +1,14 @@
-package org.example
+package io.github.pyandr3w.codestyletransformer
 
 
-val snakeMarks = "~_?!:'"
-val builtins = listOf(
+private val snakeMarks: String = "~_?!:'"
+private val builtins = listOf(
     "divmod", "~divmod", "moddiv", "~moddiv", "muldiv", "muldivc", "muldivr", "muldivmod",
     "true", "false", "null", "nil", "Nil", "throw", "at",
     "touch", "~touch", "touch2", "~touch2", "~dump", "~strdump",
     "run_method0", "run_method1", "run_method2", "run_method3", "->"
 )
-val snakeReplaceMap = mapOf(
+private val snakeReplaceMap = mapOf(
     // MAIN
     "receiveInternalMessage" to "recv_internal",
     "receiveExternalMessage" to "recv_external",
@@ -185,7 +185,7 @@ val snakeReplaceMap = mapOf(
     "tryPfxdictSet" to "pfxdict_set?",
     "tryPfxdictDelete" to "pfxdict_delete?"
 )
-val camelReplaceMap = snakeReplaceMap.entries.associate { (key, value) -> value to key }
+private val camelReplaceMap = snakeReplaceMap.entries.associate { (key, value) -> value to key }
 
 fun isSnakeCase(inputStr: String): Boolean {
     return inputStr.all { it.isLowerCase() || it.isDigit() || snakeMarks.contains(it) }
@@ -196,17 +196,17 @@ fun isCamelCase(inputStr: String): Boolean {
     return sanitizedStr.firstOrNull()?.isLowerCase() ?: false || sanitizedStr.any { it.isUpperCase() }
 }
 
-fun snakeToCamel(inputStr: String): String {
+private fun snakeToCamel(inputStr: String): String {
     val words = inputStr.split("_")
     val camelCaseWords = listOf(words[0].toLowerCase()) + words.drop(1).map { it.capitalize() }
     return camelCaseWords.joinToString("")
 }
 
-fun camelToSnake(inputStr: String): String {
+private fun camelToSnake(inputStr: String): String {
     return inputStr.replace(Regex("([a-z0-9])([A-Z])"), "$1_$2").toLowerCase()
 }
 
-fun transformQuestionMark(inputStr: String): String {
+private fun transformQuestionMark(inputStr: String): String {
     return if (!inputStr.endsWith("?")) {
         inputStr
     } else if ("_" in inputStr) {
@@ -216,7 +216,7 @@ fun transformQuestionMark(inputStr: String): String {
     }
 }
 
-fun transformExclamationMark(inputStr: String): String {
+private fun transformExclamationMark(inputStr: String): String {
     return if (!inputStr.endsWith("!")) {
         inputStr
     } else {
@@ -224,7 +224,7 @@ fun transformExclamationMark(inputStr: String): String {
     }
 }
 
-fun transformApostrophe(inputStr: String): String {
+private fun transformApostrophe(inputStr: String): String {
     return if (!inputStr.endsWith("'")) {
         inputStr
     } else {
@@ -232,7 +232,7 @@ fun transformApostrophe(inputStr: String): String {
     }
 }
 
-fun transformIsWord(inputStr: String): String {
+private fun transformIsWord(inputStr: String): String {
     return if (!(inputStr.startsWith("is") && inputStr.count { it.isUpperCase() } == 1)) {
         inputStr
     } else {
@@ -240,7 +240,7 @@ fun transformIsWord(inputStr: String): String {
     }
 }
 
-fun transformForceWord(inputStr: String): String {
+private fun transformForceWord(inputStr: String): String {
     return if (!(inputStr.startsWith("force") && inputStr[5].isUpperCase())) {
         inputStr
     } else {
@@ -248,7 +248,7 @@ fun transformForceWord(inputStr: String): String {
     }
 }
 
-fun transformModifiedWord(inputStr: String): String {
+private fun transformModifiedWord(inputStr: String): String {
     return if (!(inputStr.startsWith("modified") && inputStr[8].isUpperCase())) {
         inputStr
     } else {
@@ -256,7 +256,7 @@ fun transformModifiedWord(inputStr: String): String {
     }
 }
 
-fun transformStringToCamelCase(inputStr: String): String {
+private fun transformStringToCamelCase(inputStr: String): String {
     if (!isSnakeCase(inputStr) || inputStr in builtins) {
         return inputStr
     }
@@ -271,7 +271,7 @@ fun transformStringToCamelCase(inputStr: String): String {
     return result
 }
 
-fun transformStringToSnakeCase(inputStr: String): String {
+private fun transformStringToSnakeCase(inputStr: String): String {
     if (!isCamelCase(inputStr) || inputStr in builtins) {
         return inputStr
     }

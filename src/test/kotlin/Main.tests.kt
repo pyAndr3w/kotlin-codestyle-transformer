@@ -1,4 +1,4 @@
-import org.example.transformString
+import io.github.pyandr3w.codestyletransformer.transformString
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
